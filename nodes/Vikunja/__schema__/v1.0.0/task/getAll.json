@@ -47,6 +47,63 @@
             },
             "hex_color": {
                 "type": "string"
+            },
+            "assignees": {
+                "type": "array"
+            },
+            "buckets": {
+                "type": "array"
+            },
+            "comment_count": {
+                "type": "integer"
+            },
+            "identifier": {
+                "type": "string"
+            },
+            "index": {
+                "type": "integer"
+            },
+            "is_unread": {
+                "type": "boolean"
+            },
+            "labels": {
+                "type": "array"
+            },
+            "position": {
+                "type": "number"
+            },
+            "reactions": {
+                "type": "object"
+            },
+            "related_tasks": {
+                "type": "object"
+            },
+            "reminders": {
+                "type": "array"
+            },
+            "subscription": {
+                "type": "object"
+            },
+                    "attachments": {
+            "type": "array"
+            },
+            "bucket_id": {
+                "type": "integer"
+            },
+            "comments": {
+                "type": "array"
+            },
+            "cover_image_attachment_id": {
+                "type": "integer"
+            },
+            "created_by": {
+                "type": "object"
+            },
+            "repeat_after": {
+                "type": "integer"
+            },
+            "repeat_mode": {
+                "type": "integer"
             }
         }
     },
