@@ -870,7 +870,8 @@ export const taskProperties: INodeProperties[] = [
 			},
 		],
 		default: 0,
-		description: 'How a repeating task will repeat itself. Will be triggered when a task is marked done.',
+		description:
+			'How a repeating task will repeat itself. Will be triggered when a task is marked done.',
 		routing: {
 			send: {
 				type: 'body',
@@ -920,7 +921,8 @@ export const taskProperties: INodeProperties[] = [
 		displayName: 'Position',
 		name: 'position',
 		type: 'number',
-		description: 'The position of the task - any task project can be sorted as usual by this parameter.\nWhen accessing tasks via views with buckets, this is primarily used to sort them based on a range.\nPositions are always saved per view. They will automatically be set if you request the tasks through a view\nendpoint, otherwise they will always be 0. To update them, take a look at the Task Position endpoint.',
+		description:
+			'The position of the task - any task project can be sorted as usual by this parameter.\nWhen accessing tasks via views with buckets, this is primarily used to sort them based on a range.\nPositions are always saved per view. They will automatically be set if you request the tasks through a view\nendpoint, otherwise they will always be 0. To update them, take a look at the Task Position endpoint.',
 		displayOptions: {
 			show: {
 				resource: ['task'],
@@ -1114,7 +1116,7 @@ export const taskProperties: INodeProperties[] = [
 		name: 'taskIdentifier',
 		type: 'string',
 		default: '',
-		description: 'The task identifier, based on the project identifier and the task\'s index',
+		description: "The task identifier, based on the project identifier and the task's index",
 		routing: {
 			send: {
 				type: 'body',
@@ -1164,7 +1166,8 @@ export const taskProperties: INodeProperties[] = [
 		displayName: 'Task Position',
 		name: 'taskPosition',
 		type: 'number',
-		description: 'The position of the task - any task project can be sorted as usual by this parameter.\nWhen accessing tasks via views with buckets, this is primarily used to sort them based on a range.\nPositions are always saved per view. They will automatically be set if you request the tasks through a view\nendpoint, otherwise they will always be 0. To update them, take a look at the Task Position endpoint.',
+		description:
+			'The position of the task - any task project can be sorted as usual by this parameter.\nWhen accessing tasks via views with buckets, this is primarily used to sort them based on a range.\nPositions are always saved per view. They will automatically be set if you request the tasks through a view\nendpoint, otherwise they will always be 0. To update them, take a look at the Task Position endpoint.',
 		displayOptions: {
 			show: {
 				resource: ['task'],
@@ -1532,8 +1535,8 @@ export const taskProperties: INodeProperties[] = [
 					searchListMethod: 'searchProjectViews',
 					searchable: true,
 				},
-			}
-		]
+			},
+		],
 	},
 	{
 		displayName: 'Reminders',
@@ -1564,7 +1567,8 @@ export const taskProperties: INodeProperties[] = [
 				displayName: 'Relative Period',
 				name: 'relativePeriod',
 				type: 'number',
-				description: 'A period in seconds relative to another date argument. Negative values mean the reminder triggers before the date. Default: 0, triggers when RelativeTo is due.',
+				description:
+					'A period in seconds relative to another date argument. Negative values mean the reminder triggers before the date. Default: 0, triggers when RelativeTo is due.',
 				routing: {
 					send: {
 						type: 'body',
@@ -1587,5 +1591,5 @@ export const taskProperties: INodeProperties[] = [
 				default: '',
 			},
 		],
-	}
+	},
 ];
