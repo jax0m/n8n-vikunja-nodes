@@ -1125,25 +1125,6 @@ export const taskProperties: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Task Position',
-		name: 'taskPosition',
-		type: 'number',
-		description: 'A numeric value used to determine the position of this task',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'position',
-			},
-		},
-		default: 0,
-	},
-	{
 		displayName: 'Task View ID',
 		name: 'taskViewID',
 		type: 'number',
@@ -1163,26 +1144,6 @@ export const taskProperties: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'Task Position',
-		name: 'taskPosition',
-		type: 'number',
-		description:
-			'The position of the task - any task project can be sorted as usual by this parameter.\nWhen accessing tasks via views with buckets, this is primarily used to sort them based on a range.\nPositions are always saved per view. They will automatically be set if you request the tasks through a view\nendpoint, otherwise they will always be 0. To update them, take a look at the Task Position endpoint.',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'position',
-			},
-		},
-		default: 0,
-	},
-	{
 		displayName: 'Task Position View ID',
 		name: 'taskPositionViewID',
 		type: 'number',
@@ -1219,57 +1180,6 @@ export const taskProperties: INodeProperties[] = [
 				property: 'project_id',
 			},
 		},
-	},
-	{
-		displayName: 'Task Position Position',
-		name: 'taskPositionPosition',
-		type: 'number',
-		default: 0,
-		description: 'The position value for this task',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'position',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position View',
-		name: 'taskPositionView',
-		type: 'resourceLocator',
-		default: { mode: 'id', value: '' },
-		required: true,
-		modes: [
-			{
-				displayName: 'From List',
-				name: 'list',
-				type: 'list',
-				placeholder: 'Select a project view...',
-				typeOptions: {
-					searchListMethod: 'searchProjectViews',
-					searchable: true,
-				},
-			},
-			{
-				displayName: 'ID',
-				name: 'id',
-				type: 'string',
-				placeholder: 'Enter Project View ID',
-			},
-		],
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		description: 'The project view this task position is for',
 	},
 	{
 		displayName: 'Task Position Project',
@@ -1304,114 +1214,6 @@ export const taskProperties: INodeProperties[] = [
 		description: 'The project this task position is for',
 	},
 	{
-		displayName: 'Task Position Position',
-		name: 'taskPositionPosition',
-		type: 'number',
-		default: 0,
-		description: 'The position value for this task',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'position',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position View ID',
-		name: 'taskPositionViewID',
-		type: 'number',
-		default: 0,
-		description: 'The ID of the view this task position is for',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'view_id',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position Project ID',
-		name: 'taskPositionProjectID',
-		type: 'number',
-		default: 0,
-		description: 'The ID of the project this task position is for',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'project_id',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position Position',
-		name: 'taskPositionPosition',
-		type: 'number',
-		default: 0,
-		description: 'The position value for this task',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'position',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position View',
-		name: 'taskPositionView',
-		type: 'resourceLocator',
-		default: { mode: 'id', value: '' },
-		required: true,
-		modes: [
-			{
-				displayName: 'From List',
-				name: 'list',
-				type: 'list',
-				placeholder: 'Select a project view...',
-				typeOptions: {
-					searchListMethod: 'searchProjectViews',
-					searchable: true,
-				},
-			},
-			{
-				displayName: 'ID',
-				name: 'id',
-				type: 'string',
-				placeholder: 'Enter Project View ID',
-			},
-		],
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		description: 'The project view this task position is for',
-	},
-	{
 		displayName: 'Task Position Project',
 		name: 'taskPositionProject',
 		type: 'resourceLocator',
@@ -1442,82 +1244,6 @@ export const taskProperties: INodeProperties[] = [
 			},
 		},
 		description: 'The project this task position is for',
-	},
-	{
-		displayName: 'Task Position Position',
-		name: 'taskPositionPosition',
-		type: 'number',
-		default: 0,
-		description: 'The position value for this task',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'position',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position View ID',
-		name: 'taskPositionViewID',
-		type: 'number',
-		default: 0,
-		description: 'The ID of the view this task position is for',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'view_id',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position Project ID',
-		name: 'taskPositionProjectID',
-		type: 'number',
-		default: 0,
-		description: 'The ID of the project this task position is for',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'project_id',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position Position',
-		name: 'taskPositionPosition',
-		type: 'number',
-		default: 0,
-		description: 'The position value for this task',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'position',
-			},
-		},
 	},
 	{
 		displayName: 'Task Position View',
