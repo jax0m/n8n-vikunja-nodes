@@ -1,5 +1,4 @@
 import { INodeProperties } from 'n8n-workflow';
-
 export const taskProperties: INodeProperties[] = [
 	{
 		displayName: 'Operation',
@@ -163,7 +162,8 @@ export const taskProperties: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'DELETE',
-						url: '=/tasks/{{$parameter.taskId}}/labels/{{$parameter.taskLabel}}',
+						// FIX: Updated to use labelID instead of non-existent taskLabel
+						url: '=/tasks/{{$parameter.taskId}}/labels/{{$parameter.labelID}}',
 					},
 				},
 			},
@@ -348,6 +348,45 @@ export const taskProperties: INodeProperties[] = [
 				},
 			},
 			{
+				displayName: 'Cover Image Attachment ID',
+				name: 'coverImageAttachmentID',
+				type: 'number',
+				default: 0,
+				description: 'The ID of the attachment that is the cover image',
+				routing: {
+					send: {
+						type: 'body',
+						property: 'cover_image_attachment_id',
+					},
+				},
+			},
+			{
+				displayName: 'Created',
+				name: 'created',
+				type: 'string',
+				default: '',
+				description: 'A timestamp when this task was created',
+				routing: {
+					send: {
+						type: 'body',
+						property: 'created',
+					},
+				},
+			},
+			{
+				displayName: 'Created By',
+				name: 'createdBy',
+				type: 'string',
+				default: '',
+				description: 'The user who initially created the task',
+				routing: {
+					send: {
+						type: 'body',
+						property: 'created_by',
+					},
+				},
+			},
+			{
 				displayName: 'Description',
 				name: 'description',
 				type: 'string',
@@ -450,6 +489,68 @@ export const taskProperties: INodeProperties[] = [
 				},
 			},
 			{
+				displayName: 'Reminders',
+				name: 'reminders',
+				type: 'collection',
+				default: {},
+				options: [
+					{
+						displayName: 'Relative Period',
+						name: 'relativePeriod',
+						type: 'number',
+						description:
+							'A period in seconds relative to another date argument. Negative values mean the reminder triggers before the date. Default: 0, triggers when RelativeTo is due.',
+						routing: {
+							send: {
+								type: 'body',
+								property: 'relative_period',
+							},
+						},
+						default: 0,
+					},
+					{
+						displayName: 'Relative To',
+						name: 'relativeTo',
+						type: 'options',
+						options: [
+							{
+								name: 'Due Date',
+								value: 'due_date',
+							},
+							{
+								name: 'Start Date',
+								value: 'start_date',
+							},
+							{
+								name: 'End Date',
+								value: 'end_date',
+							},
+						],
+						description: 'The name of the date field to which the relative period refers to',
+						routing: {
+							send: {
+								type: 'body',
+								property: 'relative_to',
+							},
+						},
+						default: 'due_date',
+					},
+					{
+						displayName: 'Reminder',
+						name: 'reminder',
+						type: 'string',
+						description: 'The absolute time when the user wants to be reminded of the task',
+						routing: {
+							send: {
+								type: 'body',
+								property: 'reminder',
+							},
+						},
+						default: '',
+					},
+				],
+			},
+			{
 				displayName: 'Repeat After',
 				name: 'repeatAfter',
 				type: 'number',
@@ -473,14 +574,14 @@ export const taskProperties: INodeProperties[] = [
 						value: 0,
 					},
 					{
-						name: 'Repeat Monthly',
-						description: 'Repeat all dates each months (ignoring repeat_after)',
-						value: 1,
-					},
-					{
 						name: 'Repeat From Current Date',
 						description: 'Repeat from the current date rather than the last set date',
 						value: 2,
+					},
+					{
+						name: 'Repeat Monthly',
+						description: 'Repeat all dates each months (ignoring repeat_after)',
+						value: 1,
 					},
 				],
 				default: 0,
@@ -515,6 +616,45 @@ export const taskProperties: INodeProperties[] = [
 					send: {
 						type: 'body',
 						property: 'hex_color',
+					},
+				},
+			},
+			{
+				displayName: 'Task Identifier',
+				name: 'taskIdentifier',
+				type: 'string',
+				default: '',
+				description: "The task identifier, based on the project identifier and the task's index",
+				routing: {
+					send: {
+						type: 'body',
+						property: 'identifier',
+					},
+				},
+			},
+			{
+				displayName: 'Task Index',
+				name: 'taskIndex',
+				type: 'number',
+				default: 0,
+				description: 'The task index, calculated per project',
+				routing: {
+					send: {
+						type: 'body',
+						property: 'index',
+					},
+				},
+			},
+			{
+				displayName: 'Updated',
+				name: 'updated',
+				type: 'string',
+				default: '',
+				description: 'A timestamp when this task was last updated',
+				routing: {
+					send: {
+						type: 'body',
+						property: 'updated',
 					},
 				},
 			},
@@ -776,240 +916,8 @@ export const taskProperties: INodeProperties[] = [
 		required: true,
 	},
 	{
-		displayName: 'Cover Image Attachment ID',
-		name: 'coverImageAttachmentID',
-		type: 'number',
-		default: 0,
-		description: 'The ID of the attachment that is the cover image',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'cover_image_attachment_id',
-			},
-		},
-	},
-	{
-		displayName: 'Is Favorite',
-		name: 'isFavorite',
-		type: 'boolean',
-		default: false,
-		description: 'Whether this task is set as a favorite task',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'is_favorite',
-			},
-		},
-	},
-	{
-		displayName: 'Percent Done',
-		name: 'percentDone',
-		type: 'number',
-		typeOptions: {
-			maxValue: 1,
-			minValue: 0,
-		},
-		default: 0,
-		description: 'The progress of the task in percent',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'percent_done',
-			},
-		},
-	},
-	{
-		displayName: 'Priority',
-		name: 'priority',
-		type: 'number',
-		typeOptions: {
-			maxValue: 5,
-			minValue: 1,
-		},
-		default: 1,
-		description: 'Task priority from 1 (normal) to 5 (DO NOW)',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'priority',
-			},
-		},
-	},
-	{
-		displayName: 'Repeat After',
-		name: 'repeatAfter',
-		type: 'number',
-		default: 0,
-		description: 'The amount in seconds after this task will repeat',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'repeat_after',
-			},
-		},
-	},
-	{
-		displayName: 'Repeat Mode',
-		name: 'repeatMode',
-		type: 'options',
-		options: [
-			{
-				name: 'Repeat After Amount',
-				description: 'Repeat after the amount specified in repeat_after',
-				value: 0,
-			},
-			{
-				name: 'Repeat Monthly',
-				description: 'Repeat all dates each months (ignoring repeat_after)',
-				value: 1,
-			},
-			{
-				name: 'Repeat From Current Date',
-				description: 'Repeat from the current date rather than the last set date',
-				value: 2,
-			},
-		],
-		default: 0,
-		description:
-			'How a repeating task will repeat itself. Will be triggered when a task is marked done.',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'repeat_mode',
-			},
-		},
-	},
-	{
-		displayName: 'Start Date Time',
-		name: 'startDateTime',
-		type: 'dateTime',
-		default: '',
-		description: 'Specific date and time in RFC3339 format',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'start_date',
-			},
-		},
-	},
-	{
-		displayName: 'End Date Time',
-		name: 'endDateTime',
-		type: 'dateTime',
-		default: '',
-		description: 'Specific date and time in RFC3339 format',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'end_date',
-			},
-		},
-	},
-	{
-		displayName: 'Task Color',
-		name: 'hexColor',
-		type: 'color',
-		default: '#000000',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'hex_color',
-			},
-		},
-	},
-	{
-		displayName: 'Position',
-		name: 'position',
-		type: 'number',
-		description:
-			'The position of the task - any task project can be sorted as usual by this parameter.\nWhen accessing tasks via views with buckets, this is primarily used to sort them based on a range.\nPositions are always saved per view. They will automatically be set if you request the tasks through a view\nendpoint, otherwise they will always be 0. To update them, take a look at the Task Position endpoint.',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'position',
-			},
-		},
-		default: 0,
-	},
-	{
-		displayName: 'View ID',
-		name: 'view',
-		type: 'resourceLocator',
-		default: { mode: 'id', value: '' },
-		required: true,
-		modes: [
-			{
-				displayName: 'From List',
-				name: 'list',
-				type: 'list',
-				placeholder: 'Select a project view...',
-				typeOptions: {
-					searchListMethod: 'searchProjectViews',
-					searchable: true,
-				},
-			},
-			{
-				displayName: 'ID',
-				name: 'id',
-				type: 'string',
-				placeholder: 'Enter Project View ID',
-			},
-		],
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		description: 'The project view you want to operate on',
-	},
-	{
-		displayName: 'Created By',
-		name: 'createdBy',
-		type: 'string',
-		default: '',
-		description: 'The user who initially created the task',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'created_by',
-			},
-		},
-	},
-	{
-		displayName: 'Updated',
-		name: 'updated',
-		type: 'string',
-		default: '',
-		description: 'A timestamp when this task was last updated. You cannot change this value.',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'updated',
-			},
-		},
-	},
-	{
-		displayName: 'Created',
-		name: 'created',
-		type: 'string',
-		default: '',
-		description: 'A timestamp when this task was created. You cannot change this value.',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'created',
-			},
-		},
-	},
-	{
 		displayName: 'Label ID',
+		description: 'The ID of the label you want to add or remove',
 		name: 'labelID',
 		type: 'number',
 		default: '',
@@ -1020,302 +928,11 @@ export const taskProperties: INodeProperties[] = [
 				operation: ['addLabel', 'removeLabel'],
 			},
 		},
-	},
-	{
-		displayName: 'Task ID',
-		name: 'taskID',
-		type: 'number',
-		default: '',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: [
-					'delete',
-					'get',
-					'update',
-					'assignUser',
-					'unassignUser',
-					'addComment',
-					'updateComment',
-					'deleteComment',
-					'getAllComments',
-					'getAllLabelsOnTask',
-					'addLabel',
-					'removeLabel',
-					'addRelation',
-					'removeRelation',
-					'updateTaskPosition',
-				],
-			},
-		},
-	},
-	{
-		displayName: 'Project ID',
-		name: 'projectID',
-		type: 'number',
-		default: '',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['create', 'getAll', 'updateTaskPosition'],
-			},
-		},
-	},
-	{
-		displayName: 'Task Title',
-		name: 'taskTitle',
-		type: 'string',
-		default: '',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['create', 'update'],
-			},
-		},
-	},
-	{
-		displayName: 'Task Description',
-		name: 'taskDescription',
-		type: 'string',
-		default: '',
-		description: 'A description for the task',
-		typeOptions: {
-			rows: 4,
-		},
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['create', 'update'],
-			},
-		},
 		routing: {
 			send: {
 				type: 'body',
-				property: 'description',
+				property: 'label_id',
 			},
 		},
-	},
-	{
-		displayName: 'Task Index',
-		name: 'taskIndex',
-		type: 'number',
-		default: 0,
-		description: 'The task index, calculated per project',
-		routing: {
-			send: {
-				type: 'body',
-				property: 'index',
-			},
-		},
-	},
-	{
-		displayName: 'Task Identifier',
-		name: 'taskIdentifier',
-		type: 'string',
-		default: '',
-		description: "The task identifier, based on the project identifier and the task's index",
-		routing: {
-			send: {
-				type: 'body',
-				property: 'identifier',
-			},
-		},
-	},
-	{
-		displayName: 'Task View ID',
-		name: 'taskViewID',
-		type: 'number',
-		default: 0,
-		description: 'The ID of the view this task is part of',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'view_id',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position View ID',
-		name: 'taskPositionViewID',
-		type: 'number',
-		default: 0,
-		description: 'The ID of the view this task position is for',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'view_id',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position Project ID',
-		name: 'taskPositionProjectID',
-		type: 'number',
-		default: 0,
-		description: 'The ID of the project this task position is for',
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		routing: {
-			send: {
-				type: 'body',
-				property: 'project_id',
-			},
-		},
-	},
-	{
-		displayName: 'Task Position Project',
-		name: 'taskPositionProject',
-		type: 'resourceLocator',
-		default: { mode: 'id', value: '' },
-		required: true,
-		modes: [
-			{
-				displayName: 'From List',
-				name: 'list',
-				type: 'list',
-				placeholder: 'Select a project...',
-				typeOptions: {
-					searchListMethod: 'searchProjects',
-					searchable: true,
-				},
-			},
-			{
-				displayName: 'ID',
-				name: 'id',
-				type: 'string',
-				placeholder: 'Enter Project ID',
-			},
-		],
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		description: 'The project this task position is for',
-	},
-	{
-		displayName: 'Task Position Project',
-		name: 'taskPositionProject',
-		type: 'resourceLocator',
-		default: { mode: 'id', value: '' },
-		required: true,
-		modes: [
-			{
-				displayName: 'From List',
-				name: 'list',
-				type: 'list',
-				placeholder: 'Select a project...',
-				typeOptions: {
-					searchListMethod: 'searchProjects',
-					searchable: true,
-				},
-			},
-			{
-				displayName: 'ID',
-				name: 'id',
-				type: 'string',
-				placeholder: 'Enter Project ID',
-			},
-		],
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['updateTaskPosition'],
-			},
-		},
-		description: 'The project this task position is for',
-	},
-	{
-		displayName: 'Task Position View',
-		name: 'taskPositionView',
-		type: 'resourceLocator',
-		default: { mode: 'id', value: '' },
-		required: true,
-		modes: [
-			{
-				displayName: 'From List',
-				name: 'list',
-				type: 'list',
-				placeholder: 'Select a project view...',
-				typeOptions: {
-					searchListMethod: 'searchProjectViews',
-					searchable: true,
-				},
-			},
-		],
-	},
-	{
-		displayName: 'Reminders',
-		name: 'reminders',
-		type: 'collection',
-		default: {},
-		displayOptions: {
-			show: {
-				resource: ['task'],
-				operation: ['create', 'update'],
-			},
-		},
-		options: [
-			{
-				displayName: 'Reminder',
-				name: 'reminder',
-				type: 'string',
-				description: 'The absolute time when the user wants to be reminded of the task',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'reminder',
-					},
-				},
-				default: '',
-			},
-			{
-				displayName: 'Relative Period',
-				name: 'relativePeriod',
-				type: 'number',
-				description:
-					'A period in seconds relative to another date argument. Negative values mean the reminder triggers before the date. Default: 0, triggers when RelativeTo is due.',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'relative_period',
-					},
-				},
-				default: 0,
-			},
-			{
-				displayName: 'Relative To',
-				name: 'relativeTo',
-				type: 'string',
-				description: 'The name of the date field to which the relative period refers to',
-				routing: {
-					send: {
-						type: 'body',
-						property: 'relative_to',
-					},
-				},
-				default: '',
-			},
-		],
 	},
 ];
